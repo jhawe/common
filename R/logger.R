@@ -18,10 +18,10 @@
 #' @param fileext The file extension to be used when creating the file name for 
 #' the log file in case log.file=NULL
 #' 
-logger.create <- function(log.file=NULL, log.dir=NULL, fileext=".log"){
-  if(log.file=NULL) {
+logger.create <- function(log.file=NULL, log.dir=NULL, fileext=".log") {
+  if(is.null(log.file)) {
     pat <- format(Sys.time(), format="%a%d%b%Y_%H%M%S");
-    if(log.dir=NULL){
+    if(is.null(log.dir)){
       log.file <- tempfile(pat, fileext = fileext);
       log.dir <- dirname(log.file);
     } else {
@@ -29,29 +29,31 @@ logger.create <- function(log.file=NULL, log.dir=NULL, fileext=".log"){
     }
   }
   
-  logger <- list(log.file=log.file, log.dir=log.dir);
-  class(logger) <- "logger"
-  return(logger);
-}
-
-#' Logs a message
-#' 
-#' @param msg The message to be logged
-#' @param sep The separator to be used between individual messages
-#' @param logger An instance of a logger. If null, message will be logged to 
-#' std-out
-#' 
-#' @author Johann Hawe
-#' 
-logger.log <- function(msg, sep="\n", logger=NULL) {
-  if(!is.null(logger)){
-    if(class(logger) != "logger"){
-      stop("Provided logger is of the wrong class!.");
+  message(paste0("Log file is: ",log.file));
+  
+  logger <- list(
+    #envir = envir,
+    ## Define the accessors for the data fields.
+    #getEnv = function() {
+    #        return(get("envir",envir));
+    #},
+    
+    #' Logs a message
+    #' 
+    #' @param msg The message to be logged
+    #' @param sep The separator to be used between individual messages
+    #' @param logger An instance of a logger. If null, message will be logged to 
+    #' std-out
+    #' 
+    #' @author Johann Hawe
+    #'
+    log = function(msg, sep="\n") {
+      cat(file=log.file,append=T,sep=sep,msg);
     }
-    con <- logger$log.file;
-  } else {
-    # lets cat print to std-out
-    con <- "";
-  }
-  cat(file=con,sep=sep,msg)
+  );
+  
+  #assign('this',logger,envir=envir);
+  
+  class(logger) <- append(class(logger), "logger");
+  return(logger);
 }
