@@ -122,3 +122,38 @@ get_snp_flanking_biomart <- function(rsIds, downstr=20, upstr=20, grch=37) {
 
   return(snps)
 }
+
+#' -----------------------------------------------------------------------------
+#' Get gene positions (chr, start, end) from biomaRt for a set of given symbols.
+#'
+#' @param symbols The symbols for which to get the gene positions
+#' @param grch The genome assembly version. Default: 37
+#'
+#' @author Johann Hawe <johann.hawe@helmholtz-muenchen.de>
+#'
+#' -----------------------------------------------------------------------------
+get_genePos_biomart <- function(symbols, grch=37) {
+
+  require(biomaRt)
+
+  # create filter values
+  vals <- unique(as.character(symbols))
+
+  # set filter names
+  filt <- c("hgnc_symbol")
+
+  # set attributes to get
+  attr <- c("hgnc_symbol", "chromosome_name", "start_position", "end_position")
+
+  # query biomart
+  mart <- useEnsembl(biomart="ensembl", GRCh=grch,
+                     dataset="hsapiens_gene_ensembl")
+  genes <- getBM(attr, filt,
+                 values=list(vals),
+                 mart=mart,
+                 uniqueRows=T)
+
+  colnames(genes) <- c("symbol", "chr", "start", "end")
+
+  return(genes)
+}
