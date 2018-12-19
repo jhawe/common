@@ -1,4 +1,4 @@
-#'
+#' -----------------------------------------------------------------------------
 #' Starts monitoring a job based on the output on 'top'
 #' bash command. Starts top in background and this process
 #' should (usually) be killed manually after the job is run
@@ -10,12 +10,14 @@
 #' 
 #' @author Johann Hawe
 #'
+#' -----------------------------------------------------------------------------
 monitor_start <- function(mfile, uname="johann.hawe") {
   # make a system call to run top in batch mode
   cmd <- paste0("top -d 10 -n 100 -b -u ", uname, " > ", mfile, " &")
   system(cmd)
 }
 
+#' -----------------------------------------------------------------------------
 #'
 #' This method kills currently running background jobs
 #' Should always be used when monitor_start() was called earlier,
@@ -24,6 +26,7 @@ monitor_start <- function(mfile, uname="johann.hawe") {
 #' 
 #' @author Johann Hawe
 #'
+#' -----------------------------------------------------------------------------
 monitor_stop <- function() {
   # kill the expected one background process  (!)
   # for the current session

@@ -1,12 +1,15 @@
+#' -----------------------------------------------------------------------------
 #'
-#' Script to conveniently log information
+#' Script to conveniently log information. 
 #'
 #' @author Johann Hawe
 #' 
 #' @date 07/02/2017
 #' 
+#' -----------------------------------------------------------------------------
 
 
+#' -----------------------------------------------------------------------------
 #' Creates an instance of a logger
 #' 
 #' @param log.file The full path to the log file to be used. In case no file is
@@ -18,6 +21,7 @@
 #' @param fileext The file extension to be used when creating the file name for 
 #' the log file in case log.file=NULL
 #' 
+#' -----------------------------------------------------------------------------
 logger.create <- function(log.file=NULL, log.dir=NULL, fileext=".log") {
   if(is.null(log.file)) {
     pat <- format(Sys.time(), format="%a%d%b%Y_%H%M%S");

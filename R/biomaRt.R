@@ -153,6 +153,11 @@ get_genePos_biomart <- function(symbols, grch=37) {
                  mart=mart,
                  uniqueRows=T)
 
+  # filter for standard chromosome names
+  genes <- genes[genes$chromosome_name %in% c(1:22, "X", "Y"),]
+
+  # set nice row and col names
+  rownames(genes) <- genes$hgnc_symbol
   colnames(genes) <- c("symbol", "chr", "start", "end")
 
   return(genes)
