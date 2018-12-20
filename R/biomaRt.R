@@ -32,7 +32,12 @@ get_snps_biomart <- function(ranges, grch=37, additional.info=F) {
   }
 
   # query biomart
-  mart <- useEnsembl(biomart="snp", GRCh=grch, dataset="hsapiens_snp")
+  if(grch<38) {
+    message("Using archived ENSEMBL version.")
+    mart <- useEnsembl(biomart="snp", GRCh=grch, dataset="hsapiens_snp")
+  } else {
+    mart <- useMart("ENSEMBL_MART_SNP", "hsapiens_snp")
+  }
   snps <- getBM(attr, filt,
                 values=list(chrs, start, end),
                 mart=mart,
