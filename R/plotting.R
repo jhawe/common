@@ -59,8 +59,8 @@ correlation_map <- function(data, cluster = F,
 #' @param dim2 The second dimension obtained from the t-SNE output
 #' @param annotation The annotation for the individual samples. Must be same 
 #' length as dim1 and dim2
-#' @param title The title to be used
-#' @param theme The ggplot theme to be used. Default: theme_bw()
+#' @param title The title to be used. Default: Empty string
+#' @param theme The ggplot theme to be used. Default: theme_linedraw()
 #' @param dim3 Optional third dimension from the tSNE output. Will be used for
 #' coloring the points and the annotation information will be shown as shapes.
 #' Default: NULL
@@ -69,7 +69,7 @@ correlation_map <- function(data, cluster = F,
 #'
 #-------------------------------------------------------------------------------
 plot_tsne <- function(dim1, dim2, annotation, 
-                      title, theme=theme_bw(), dim3=NULL) {
+                      title="", theme=theme_linedraw(), dim3=NULL) {
   require(ggplot2)
 
   toplot <- cbind.data.frame(dim1, dim2, label=annotation)
