@@ -13,7 +13,7 @@
 #' @author Johann Hawe <johann.hawe@helmholtz-muenchen.de>
 #'
 #' -----------------------------------------------------------------------------
-get_snps_biomart <- function(ranges, grch=37, additional.info=F) {
+get_snps_biomart <- function(ranges, grch=38, additional.info=F) {
 
   require(biomaRt)
 
@@ -36,9 +36,7 @@ get_snps_biomart <- function(ranges, grch=37, additional.info=F) {
     message("Using archived ENSEMBL version.")
     mart <- useEnsembl(biomart="snp", GRCh=grch, dataset="hsapiens_snp")
   } else {
-    mart <- useMart("ENSEMBL_MART_SNP", "hsapiens_snp", 
-                    host = "www.ensembl.org",
-                    ensemblRedirect = FALSE)
+    mart <- useEnsembl(biomart="snp", dataset="hsapiens_snp")
   }
   snps <- getBM(attr, filt,
                 values=list(chrs, start, end),
@@ -63,7 +61,7 @@ get_snps_biomart <- function(ranges, grch=37, additional.info=F) {
 #' @author Johann Hawe <johann.hawe@helmholtz-muenchen.de>
 #'
 #' -----------------------------------------------------------------------------
-get_snpPos_biomart <- function(rsIds, grch=37, additional.info=F) {
+get_snpPos_biomart <- function(rsIds, grch=38, additional.info=F) {
 
   require(biomaRt)
 
@@ -80,8 +78,14 @@ get_snpPos_biomart <- function(rsIds, grch=37, additional.info=F) {
   if(additional.info) {
     attr <- c(attr,  "consequence_type_tv")
   }
+  
   # query biomart
-  mart <- useEnsembl(biomart="snp", GRCh=grch, dataset="hsapiens_snp")
+  if(grch == 38) {
+    mart <- useEnsembl(biomart="snp", dataset="hsapiens_snp")
+  } else {
+    mart <- useEnsembl(biomart="snp", GRCh=grch, dataset="hsapiens_snp")  
+  }
+  
   snps <- getBM(attr, filt,
                 values=list(vals),
                 mart=mart,
@@ -139,7 +143,7 @@ get_snp_flanking_biomart <- function(rsIds, downstr=20, upstr=20, grch=37) {
 #' @author Johann Hawe <johann.hawe@helmholtz-muenchen.de>
 #'
 #' -----------------------------------------------------------------------------
-get_genePos_biomart <- function(symbols, grch=37) {
+get_genePos_biomart <- function(symbols, grch=38) {
 
   require(biomaRt)
 
@@ -153,8 +157,14 @@ get_genePos_biomart <- function(symbols, grch=37) {
   attr <- c("hgnc_symbol", "chromosome_name", "start_position", "end_position")
 
   # query biomart
-  mart <- useEnsembl(biomart="ensembl", GRCh=grch,
-                     dataset="hsapiens_gene_ensembl")
+  if(grch == 38) {
+    mart <- useEnsembl(biomart = "ensembl",
+                       dataset = "hsapiens_gene_ensembl")
+  } else {
+    mart <- useEnsembl(biomart = "ensembl",
+                       GRCh = grch,
+                       dataset = "hsapiens_gene_ensembl")
+  }
   genes <- getBM(attr, filt,
                  values=list(vals),
                  mart=mart,
